@@ -19,8 +19,13 @@ class CityListVM: ObservableObject {
     
     init(model: WhetherModel) {
         cityWhetherList = model.cityWhetherList.compactMap({.init(model: $0)})
-        cityWhetherListCancellable = whetherSingleton.objectWillChange.sink(receiveValue: {
-            self.cityWhetherList = model.cityWhetherList.compactMap({.init(model: $0)})
-        })
+        
+        cityWhetherListCancellable = whetherSingleton
+            .objectWillChange
+            .sink(receiveValue: {[weak self] in
+                DispatchQueue.main.async { [weak self] in
+                    self?.cityWhetherList = model.cityWhetherList.compactMap({.init(model: $0)})
+                }
+            })
     }
 }

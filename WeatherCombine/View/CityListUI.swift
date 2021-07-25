@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 
+
 class CityListUI: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     var VM: CityListVM? = nil
     
@@ -18,16 +19,30 @@ class CityListUI: UIViewController, UITableViewDelegate, UITableViewDataSource  
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        self.citiesTable.delegate = self
-        //        self.citiesTable.dataSource = self
-        //        self.citiesTable.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        // Do any additional setup after loading the view.
+        self.citiesTable.delegate = self
+        self.citiesTable.dataSource = self
+        self.citiesTable.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         
-        //        VM = .init(model: whetherSingleton)
-        //        VMCancellable = VM?.objectWillChange.sink(receiveValue: { [weak self] in
-        //            self?.citiesTable.reloadData()
-        //        })
-        //        citiesTable.reloadData()
+        
+        VM = .init(model: whetherSingleton)
+        VMCancellable = VM?
+            .objectWillChange
+            .sink(receiveValue: { [weak self] in
+                DispatchQueue.main.async { [weak self] in
+                    if self != nil{
+                        let currentCount = self!.citiesTable.numberOfRows(inSection: 0)
+                        let toInsert = self!.VM!.cityWhetherList.count - currentCount
+                        
+                        self?.citiesTable.beginUpdates()
+                        //self?.tblView.insertRows(at: [IndexPath.init(row: self.yourArray.count-1, section: 0)], with: .automatic)
+                        for _ in 0..<toInsert{
+                            self?.citiesTable.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .automatic)
+                        }
+                        self?.citiesTable.endUpdates()
+                    }
+                }
+            })
+        citiesTable.reloadData()
     }
     
     
@@ -43,13 +58,14 @@ class CityListUI: UIViewController, UITableViewDelegate, UITableViewDataSource  
     @IBAction func addCityPressed(_ sender: UIButton) {
         let name = cityNameTextField.text ?? ""
         
-        if name == ""{
+        guard name != "" else {
             let alert = UIAlertController(title: "My Alert", message: "This is an alert.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
                 NSLog("The \"OK\" alert occured.")
             }))
             
             self.present(alert, animated: true, completion: nil)
+            return
         }
         
         whetherSingleton.requestCityWhether(cityName: name)
@@ -69,14 +85,20 @@ class CityListUI: UIViewController, UITableViewDelegate, UITableViewDataSource  
         return cell
     }
     
-    //    func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-    //            if let cell = sender as? UITableViewCell {
-    //                let selectedIndex = self.citiesTable.indexPath(for: cell)!.row
-    //                if segue.identifier == "cityWhetherDetail" {
-    //                    let vc = segue.destination as! CityWhetherDetail
-    //                    vc.VM = VM?.cityWhetherList[selectedIndex]
-    //                }
-    //            }
-    //        }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "cityWhetherDetail", sender: tableView.cellForRow(at: indexPath))
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? UITableViewCell {
+            let selectedIndex = self.citiesTable.indexPath(for: cell)!.row
+            if segue.identifier == "cityWhetherDetail" {
+                let vc = segue.destination as! CityWhetherDetail
+                vc.VM = VM?.cityWhetherList[selectedIndex]
+            }
+        }
+    }
 }
 

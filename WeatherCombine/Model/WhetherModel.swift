@@ -11,7 +11,7 @@ import Combine
 
 
 class WhetherModel: ObservableObject {
-    @Published var cityWhetherList: Set<CityModel> = [.init(name: "Moscow"), .init(name: "Ulyanovsk")]
+    @Published var cityWhetherList: [CityModel] = [.init(name: "Moscow"), .init(name: "Ulyanovsk")]
     
     
     func requestCityWhether(cityName: String) {
@@ -19,7 +19,9 @@ class WhetherModel: ObservableObject {
         //парсим
         //создаем модель погоды города
         let cityModel = CityModel.init(name: cityName)
-        self.cityWhetherList.insert(cityModel)
+        if !cityWhetherList.contains(cityModel){
+            self.cityWhetherList.insert(cityModel, at: 0)
+        }
     }
 }
 

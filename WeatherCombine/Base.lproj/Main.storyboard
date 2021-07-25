@@ -24,7 +24,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xvJ-VS-BPC">
-                                <rect key="frame" x="213" y="411" width="42" height="21"/>
+                                <rect key="frame" x="213" y="411" width="133" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -34,13 +34,14 @@
                         <viewLayoutGuide key="safeArea" id="bsB-V5-Llc"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Oh7-AA-Rym"/>
                     <connections>
                         <outlet property="nameLabel" destination="xvJ-VS-BPC" id="tjw-B0-6gH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="faI-c8-UOu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1143" y="-106"/>
+            <point key="canvasLocation" x="1142.0289855072465" y="-106.47321428571428"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="vJt-ty-Q6g">
@@ -83,6 +84,9 @@
                                 <rect key="frame" x="180" y="139" width="55" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="AddCity"/>
+                                <connections>
+                                    <action selector="addCityPressed:" destination="arp-0I-lIh" eventType="touchUpInside" id="VAZ-dq-Q4n"/>
+                                </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bF6-h7-1wg">
                                 <rect key="frame" x="87" y="239" width="240" height="558"/>
@@ -94,10 +98,15 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="Fry-aS-BDk"/>
+                    <connections>
+                        <outlet property="citiesTable" destination="bF6-h7-1wg" id="Lhm-fm-hvg"/>
+                        <outlet property="cityNameTextField" destination="nm6-Jy-toe" id="3cu-UP-vKU"/>
+                        <segue destination="e0g-qe-rzx" kind="show" identifier="cityWhetherDetail" id="YgU-8u-lcN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="py9-Oy-xvY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="257.97101449275362" y="-106.47321428571428"/>
+            <point key="canvasLocation" x="239" y="-106"/>
         </scene>
     </scenes>
     <resources>
